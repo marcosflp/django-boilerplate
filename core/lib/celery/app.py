@@ -4,9 +4,7 @@ from django.conf import settings
 from core.lib.celery.constants import Queue, TaskPriority
 
 # Remember to register the module that you added a new task
-include_modules = [
-    'core.tasks'
-]
+include_modules = ["core.tasks"]
 
 celery_config = dict(
     task_serializer="json",
@@ -27,7 +25,12 @@ celery_config = dict(
 )
 
 
-app = Celery("celery", backend=settings.CELERY_BROKER_URL, broker=settings.CELERY_BROKER_URL, include=include_modules)
+app = Celery(
+    "celery",
+    backend=settings.CELERY_BROKER_URL,
+    broker=settings.CELERY_BROKER_URL,
+    include=include_modules,
+)
 app.conf.update(**celery_config)
 
 app.autodiscover_tasks()

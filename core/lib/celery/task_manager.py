@@ -9,7 +9,9 @@ def is_task_disabled(task_name: str):
     return redis_client.exists(key) == 1
 
 
-def disable_task(task_name: str, expiration_seconds=DEFAULT_TASK_THROTTLE_EXPIRATION_SECONDS):
+def disable_task(
+    task_name: str, expiration_seconds=DEFAULT_TASK_THROTTLE_EXPIRATION_SECONDS
+):
     key = _get_task_disabled_redis_key(task_name)
     redis_client.set(key, "true", ex=expiration_seconds)
 

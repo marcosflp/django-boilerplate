@@ -16,6 +16,11 @@ services:
   postgres:
     container_name: postgres
     image: postgres:14.1-alpine
+    ports:
+      - 6432:5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
     volumes:
       - ./.postgres-data/db:/var/lib/postgresql/data
 

@@ -61,4 +61,6 @@ task_with_retries = functools.partial(
 )
 
 
-task_with_connection_retry = functools.partial(task_with_retries, autoretry_for=(requests.exceptions.ConnectionError,))
+task_with_connection_retry = functools.partial(
+    task_with_retries, autoretry_for=(requests.exceptions.ConnectionError,)
+)
