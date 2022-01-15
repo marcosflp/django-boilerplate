@@ -8,10 +8,12 @@ This is a compilation of patterns and libraries that I learned over the years to
 
 - Django3
 - Postgres
-- GraphQL/Graphene
-- Docker
 - Pytest
 - Factory Boy
+- Celery
+- Redis
+- GraphQL/Graphene
+- Docker
 
 #### Patterns
 
