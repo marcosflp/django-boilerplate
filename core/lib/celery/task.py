@@ -7,7 +7,6 @@ import requests
 from core.lib.celery.app import app
 from core.lib.celery.task_manager import is_task_disabled
 
-
 logger = logging.getLogger(__name__)
 
 # Set up task decorator to be registered to our Celery app

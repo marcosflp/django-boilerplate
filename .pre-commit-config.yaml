@@ -1,0 +1,18 @@
+fail_fast: true
+repos:
+#  - repo: https://github.com/psf/black
+#    rev: 21.12b0
+#    hooks:
+#      - id: black
+#        entry: bash -c 'black "$@"; git add -u;' --
+#        language_version: python3.9
+  - repo: https://github.com/pycqa/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+        name: isort (python)
+        entry: bash -c 'isort "$@"; git add -u;' --
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 4.0.1
+    hooks:
+    -   id: flake8

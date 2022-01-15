@@ -26,6 +26,7 @@ This is a compilation of patterns and libraries that I learned over the years to
 
 - Clone the project: `$ git clone git@github.com:marcosflp/django-boilerplate.git project_name`
 - Access the project folder: `$ cd project_name`
+- Setup pre-commit: `$ pre-commit install`
 
 ### Docker
 

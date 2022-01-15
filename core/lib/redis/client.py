@@ -1,5 +1,4 @@
 import fakeredis
-
 from django.conf import settings
 from redis import Redis
 
