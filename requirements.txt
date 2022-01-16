@@ -19,6 +19,7 @@ decorator==5.1.1
 Deprecated==1.2.13
 distlib==0.3.4
 Django==3.2.11
+django-cors-headers==3.11.0
 django-extensions==3.1.5
 django-redis==5.2.0
 executing==0.8.2
