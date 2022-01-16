@@ -40,3 +40,17 @@ services:
       - postgres
       - redis
       - web
+
+  celery_beat:
+    container_name: celery_beat
+    restart: always
+    build:
+      context: .
+    command: celery -A core.celery_worker beat -l info
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - redis
+      - web
+      - celery

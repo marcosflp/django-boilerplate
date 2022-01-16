@@ -11,6 +11,7 @@ This is a compilation of patterns and libraries that I learned over the years to
 - Pytest
 - Factory Boy
 - Celery
+- Celery Beat (Periodic tasks)
 - Redis
 - GraphQL/Graphene
 - Docker

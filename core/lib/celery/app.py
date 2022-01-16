@@ -2,6 +2,7 @@ from celery import Celery
 from django.conf import settings
 
 from core.lib.celery.constants import Queue, TaskPriority
+from core.periodic_tasks import PERIODIC_TASKS
 
 # Remember to register the module that you added a new task
 include_modules = ["core.tasks"]
@@ -34,3 +35,5 @@ app = Celery(
 app.conf.update(**celery_config)
 
 app.autodiscover_tasks()
+
+app.conf.beat_schedule = PERIODIC_TASKS
