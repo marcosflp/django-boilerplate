@@ -10,4 +10,3 @@ logger = logging.getLogger(__name__)
 @task
 def heartbeat():
     logger.info("Heartbeat %s", str(timezone.now()))
-    print(f"LOL: {timezone.now()}")

@@ -1,5 +1,7 @@
 import os
 
+from django.utils.log import DEFAULT_LOGGING
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "3-e9pr$+z)$na%f5-6%_=c@^c3izk&++a+$e=jqh555&g4625t"
 DEBUG = True
@@ -128,3 +130,38 @@ CELERY_RESULT_SERIALIZER = "json"
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+
+# Logging
+
+LOGGING = {
+    "version": 1,
+    "formatters": {
+        "django.server": DEFAULT_LOGGING["formatters"]["django.server"],
+        "verbose": {
+            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
+        },
+        "simple": {
+            "format": "%(levelname)s [%(asctime)s] %(name)s: %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+    },
+    "handlers": {
+        "django.server": DEFAULT_LOGGING["handlers"]["django.server"],
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+    },
+    "loggers": {
+        "": {
+            "level": "DEBUG",
+            "handlers": ["console"],
+        },
+        "django.server": {
+            "handlers": ["console", "django.server"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+    },
+}
