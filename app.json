@@ -21,6 +21,10 @@
     "SECRET_KEY": {
       "description": "Django SECRET_KEY setting",
       "generator": "secret"
+    },
+    "FRONTEND_APP_URL": {
+      "description": "Frontend app URL",
+      "value": ""
     }
   },
   "formation": {

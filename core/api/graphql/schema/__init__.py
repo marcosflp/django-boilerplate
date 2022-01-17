@@ -5,7 +5,7 @@ class Hello(graphene.ObjectType):
     hello = graphene.String()
 
     def resolve_hello(self, info):
-        return "Hi!"
+        return "Hello from the GraphQL API!"
 
 
 class Query(Hello, graphene.ObjectType):

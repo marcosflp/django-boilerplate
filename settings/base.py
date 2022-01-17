@@ -8,7 +8,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config(
     "SECRET_KEY", default="3-e9pr$+z)$na%f5-6%_=c@^c3izk&++a+$e=jqh555&g4625t", cast=str
 )
-DEBUG = config("DEBUG", default=False, cast=bool)
+DEBUG = config("DEBUG", default=True, cast=bool)
 TESTING = config("TESTING", default=False, cast=bool)
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS", default="*", cast=lambda v: [s.strip() for s in v.split(",")]
@@ -142,10 +142,13 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_ACKS_LATE = True
 
 
-# Cors
+# CORS
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    config("FRONTEND_APP_URL", default="http://localhost:3000", cast=str),
+]
+CORS_ORIGIN_WHITELIST = [
+    config("FRONTEND_APP_URL", default="http://localhost:3000", cast=str),
 ]
 
 
@@ -178,7 +181,7 @@ LOGGING = {
             "handlers": ["console"],
         },
         "django": {
-            "level": "DEBUG",
+            "level": "INFO",
             "handlers": ["console"],
         },
         "django.server": {
