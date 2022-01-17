@@ -1,12 +1,18 @@
 import os
 
+from decouple import config
+from dj_database_url import parse as db_url
 from django.utils.log import DEFAULT_LOGGING
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = "3-e9pr$+z)$na%f5-6%_=c@^c3izk&++a+$e=jqh555&g4625t"
-DEBUG = True
-TESTING = False
-ALLOWED_HOSTS = ["*"]
+SECRET_KEY = config(
+    "SECRET_KEY", default="3-e9pr$+z)$na%f5-6%_=c@^c3izk&++a+$e=jqh555&g4625t", cast=str
+)
+DEBUG = config("DEBUG", default=False, cast=bool)
+TESTING = config("TESTING", default=False, cast=bool)
+ALLOWED_HOSTS = config(
+    "ALLOWED_HOSTS", cast=lambda v: [s.strip() for s in v.split(",")]
+)
 
 
 # Application definition
@@ -61,10 +67,11 @@ WSGI_APPLICATION = "wsgi.application"
 # Database
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-    }
+    "default": config(
+        "DATABASE_URL",
+        default="postgres://root:password@localhost:6432/postgres",
+        cast=db_url,
+    ),
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
@@ -113,7 +120,7 @@ GRAPHENE = {"SCHEMA": "core.api.graphql.schema.schema"}
 
 # Redis
 
-REDIS_URL = "redis://redis:6379"
+REDIS_URL = config("REDIS_URL", default="redis://redis:6379", cast=str)
 GENERAL_REDIS_DB = 0
 CELERY_REDIS_DB = 0
 
