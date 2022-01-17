@@ -51,6 +51,9 @@
         "version": "6"
       },
       "as": "REDIS"
+    },
+    {
+      "plan": "papertrail:choklad"
     }
   ],
   "buildpacks": [
