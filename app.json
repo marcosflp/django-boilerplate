@@ -10,14 +10,6 @@
       "description": "Current environment",
       "value": "production"
     },
-    "DISABLE_COLLECTSTATIC": {
-      "description": "Disables Heroku collectstatic",
-      "value": "1"
-    },
-    "ENABLE_DJANGO_COLLECTSTATIC": {
-      "description": "Enables post-compile collectstatic (it is run by bin/post_compile)",
-      "value": "1"
-    },
     "AUTO_MIGRATE": {
       "description": "Heroku setting to run Django migrate automatically (it is run by bin/post_compile)",
       "value": "1"
