@@ -6,6 +6,10 @@
     "ALLOWED_HOSTS": {
       "description": "Django ALLOWED_HOSTS setting, e.g.: .appname.herokuapp.com"
     },
+    "ENVIRONMENT": {
+      "description": "Current environment",
+      "value": "production"
+    },
     "DISABLE_COLLECTSTATIC": {
       "description": "Disables Heroku collectstatic",
       "value": "1"
