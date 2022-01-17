@@ -137,12 +137,17 @@ CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 
+# Ensure tasks will be re-queued after a worker failure.
+# The celery tasks must be idempotent so that this is safe.
+CELERY_ACKS_LATE = True
+
 
 # Cors
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+
 
 # Logging
 
