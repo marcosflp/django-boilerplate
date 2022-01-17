@@ -148,6 +148,7 @@ CORS_ALLOWED_ORIGINS = [
 
 LOGGING = {
     "version": 1,
+    "disable_existing_loggers": False,
     "formatters": {
         "django.server": DEFAULT_LOGGING["formatters"]["django.server"],
         "verbose": {
@@ -168,6 +169,10 @@ LOGGING = {
     },
     "loggers": {
         "": {
+            "level": "DEBUG",
+            "handlers": ["console"],
+        },
+        "django": {
             "level": "DEBUG",
             "handlers": ["console"],
         },
