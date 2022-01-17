@@ -48,3 +48,8 @@ $ pre-commit install
 - Run migrations: `$ python manage.py migrate`
 - Running the server: `$ python manage.py runserver`
 - Running tests: `$ pytest`
+
+
+## Deployment
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
