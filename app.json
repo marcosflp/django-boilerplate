@@ -20,10 +20,10 @@
       "generator": "secret"
     },
     "ALLOWED_HOSTS": {
-      "description": "Django ALLOWED_HOSTS setting, e.g.: .appname.herokuapp.com"
+      "description": "Django ALLOWED_HOSTS setting, e.g.: <app-name>.herokuapp.com"
     },
     "FRONTEND_APP_URL": {
-      "description": "Frontend app URL",
+      "description": "Frontend APP URL, e.g.: https://<app-name>.herokuapp.com",
       "value": ""
     }
   },
