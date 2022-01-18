@@ -62,13 +62,18 @@ Automatically deploy this project to Heroku! The "Deploy to Heroku" button enabl
 
 This file describes the settings to automatically deploy the project to Heroku.
 
-- **env**: environment variables; Most of the settings is already configured. You just need to make sure to set the `ALLOWED_HOSTS` and `FRONTEND_APP_URL` correctly to avoid CORS problems 
-- **addons**: services used by the application to be installed
-- **formation**: configure the dyno's used by the application
-- **buildpacks**: specify how to build the application. By selecting "heroku/python"" heroku will automatically:
+- **env**: environment variables. Most of the settings is already configured. You just need to make sure to set the `ALLOWED_HOSTS` and `FRONTEND_APP_URL` correctly to avoid CORS problems 
+- **addons**: specify the services used by the application (e.g.: postgres)
+- **formation**: define the dyno instances. You can set the size and the amount of instances
+- **buildpacks**: specify how to build the application. By selecting "heroku/python" heroku will automatically:
   - Build a python instance to run the project
   - Install the project's dependencies from the `requirements.txt` file
 
 #### `Procfile`
 
 This file specifies the commands that are executed by the app on startup. We are using it to run the django and celery after Heroku finishes the deployment.
+
+
+#### `runtime.txt`
+
+Specify the python version to be used
