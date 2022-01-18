@@ -1,6 +1,6 @@
 ## About
 
-After years of working with different Django projects, I noticed some excellent design patterns that help maintain the project's code quality, simplicity, readability, maintainability, reliability, and testing.
+After years of working with different Django projects, I noticed some excellent design patterns and packages that helps maintain the project's code quality, simplicity, readability, maintainability, reliability, and testing.
 
 This is a compilation of patterns and libraries that I learned over the years to help build a robust Django application fast.
 
@@ -52,4 +52,23 @@ $ pre-commit install
 
 ## Deployment
 
+Automatically deploy this project to Heroku! The "Deploy to Heroku" button enables users to deploy apps to Heroku without leaving the web browser, and with little or no configuration.
+
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+### How it works
+
+#### `app.json`
+
+This file describes de settings to automatically deploy the project to Heroku.
+
+- **env**: environment variables; Most of the settings is already configured. You just need to make sure to set the `ALLOWED_HOSTS` and `FRONTEND_APP_URL` correctly to avoid CORS problems 
+- **addons**: services used by the application to be installed
+- **formation**: configure the dyno's used by the application
+- **buildpacks**: specify how to build the application. By selecting "heroku/python"" heroku will automatically:
+  - Build a python instance to run the project
+  - Install the project's dependencies from the `requirements.txt` file
+
+#### `Procfile`
+
+This file specifies the commands that are executed by the app on startup. We are using it to run the django and celery after Heroku finishes the deployment.
