@@ -60,7 +60,7 @@ Automatically deploy this project to Heroku! The "Deploy to Heroku" button enabl
 
 #### `app.json`
 
-This file describes de settings to automatically deploy the project to Heroku.
+This file describes the settings to automatically deploy the project to Heroku.
 
 - **env**: environment variables; Most of the settings is already configured. You just need to make sure to set the `ALLOWED_HOSTS` and `FRONTEND_APP_URL` correctly to avoid CORS problems 
 - **addons**: services used by the application to be installed
