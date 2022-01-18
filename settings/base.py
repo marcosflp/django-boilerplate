@@ -144,6 +144,7 @@ CELERY_ACKS_LATE = True
 
 # CORS
 
+CORS_ORIGIN_ALLOW_ALL = config("CORS_ORIGIN_ALLOW_ALL", default=False, cast=bool)
 CORS_ALLOWED_ORIGINS = [
     config("FRONTEND_APP_URL", default="http://localhost:3000", cast=str),
 ]
