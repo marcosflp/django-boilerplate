@@ -12,24 +12,40 @@ This is a compilation of patterns and libraries that I learned over the years to
 - Factory Boy
 - Celery
 - Celery Beat (Periodic tasks)
+- Python decouple
+- Pytest
+- Isort
+- Black
+- Flak8
+- Pre-commit
 - Redis
 - GraphQL/Graphene
 - Docker
 
 #### Patterns
 
-- Repository Pattern, for the database
-- Single app
-- Service
+- Repository Pattern
+  - Every query should be written in the module `core/db/repository`
+  - Avoid writing queries on Django's Manager/QuerySet.
+  - The repository functions should return a list of instances, instead of a QuerySet. This makes easy caching data. 
+- Single Django app layer
+  - It's recommend to write the entire application inside the `core`
+  - Avoid creating new django apps
+- One model per file
+  - Each model should have its own file in `core/db/models/`
+- Service layer
 
 
 ## Setup
 
-- Clone the project: `$ git clone git@github.com:marcosflp/django-boilerplate.git project_name`
-- Go to `$ cd project_name`
+Clone the project
+```shell
+$ git clone git@github.com:marcosflp/django-boilerplate.git project_name
+$ cd project_name
+```
 
 Install pre-commit
-```sh
+```shell
 $ pip install pre-commit
 $ pre-commit install
 ```
