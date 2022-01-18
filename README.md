@@ -52,11 +52,13 @@ $ pre-commit install
 
 ## Deployment
 
-Automatically deploy this project to Heroku! The "Deploy to Heroku" button enables users to deploy apps to Heroku without leaving the web browser, and with little or no configuration.
+Automatically deploy this project to Heroku!
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ### How it works
+
+The "Deploy to Heroku" button enables users to deploy apps to Heroku without leaving the web browser, and with little or no configuration. There are four conf files required to deploy this project: 
 
 #### `app.json`
 
