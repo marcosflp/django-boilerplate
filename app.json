@@ -3,16 +3,13 @@
   "description": "A Django boilerplate project",
   "keywords": ["python", "django"],
   "env": {
-    "ALLOWED_HOSTS": {
-      "description": "Django ALLOWED_HOSTS setting, e.g.: .appname.herokuapp.com"
+    "DEBUG": {
+      "description": "Django DEBUG settings",
+      "value": "False"
     },
     "ENVIRONMENT": {
       "description": "Current environment",
       "value": "production"
-    },
-    "AUTO_MIGRATE": {
-      "description": "Heroku setting to run Django migrate automatically (it is run by bin/post_compile)",
-      "value": "1"
     },
     "DJANGO_SETTINGS_MODULE": {
       "description": "Django settings Python import path",
@@ -21,6 +18,9 @@
     "SECRET_KEY": {
       "description": "Django SECRET_KEY setting",
       "generator": "secret"
+    },
+    "ALLOWED_HOSTS": {
+      "description": "Django ALLOWED_HOSTS setting, e.g.: .appname.herokuapp.com"
     },
     "FRONTEND_APP_URL": {
       "description": "Frontend app URL",

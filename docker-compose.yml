@@ -29,7 +29,7 @@ services:
     image: redis:6.2.6-alpine
 
   celery:
-    container_name: celery
+    container_name: worker
     restart: always
     build:
       context: .
