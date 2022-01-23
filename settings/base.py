@@ -70,7 +70,7 @@ WSGI_APPLICATION = "wsgi.application"
 DATABASES = {
     "default": config(
         "DATABASE_URL",
-        default="postgres://root:password@localhost:6432/postgres",
+        default="postgres://root:password@postgres:5432/postgres",
         cast=db_url,
     ),
 }

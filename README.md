@@ -34,6 +34,8 @@ This is a compilation of patterns and libraries that I learned over the years to
 - One model per file
   - Each model should have its own file in `core/db/models/`
 - Service layer
+  - Add all business logic in `core/services/`
+
 
 
 ## Setup
