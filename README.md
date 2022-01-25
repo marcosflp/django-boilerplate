@@ -4,28 +4,39 @@ After years of working with different Django projects, I noticed some excellent 
 
 This is a compilation of patterns and libraries that I learned over the years to help build a robust Django application fast.
 
-#### Stack included
 
-- Django3
-- Postgres
-- Pytest
-- Factory Boy
-- Celery
-- Celery Beat (Periodic tasks)
-- Python decouple
-- Pytest
-- Isort
-- Black
-- Flak8
-- Pre-commit
-- Redis
-- GraphQL/Graphene
-- Docker
+## Stack included
 
-#### Patterns
+**App**
+- [Django3](https://www.djangoproject.com/), framework for building fast and clean web applications
+- [Postgres](https://www.postgresql.org/), open-source object-relational database for persisting data
+- [Redis](https://redis.io/), in-memory data structure store used as a database, cache, and message broker
+- [GraphQL/Graphene](https://docs.graphene-python.org/projects/django/en/latest/), query language for the API and a runtime for fulfilling those queries with existing data
+- [Python decouple](https://github.com/henriquebastos/python-decouple), helps you to organize your project settings on environment variables
+
+**Background and scheduled tasks:**
+- [Celery](https://docs.celeryproject.org/en/stable/), task queue with to process background tasks
+- [Celery Beat (Periodic tasks)](https://docs.celeryproject.org/en/stable/userguide/periodic-tasks.html), scheduler to kick off tasks at regular intervals
+
+**Testing:**
+- [Pytest](https://docs.pytest.org/en/6.2.x/), test framework that makes easy to write small and scalable tests
+- [Faker](https://faker.readthedocs.io/en/master/), generates fake data for you
+- [Freezegun](https://github.com/spulec/freezegun), allows your tests to freeze or travel through time
+- [Factory Boy](https://factoryboy.readthedocs.io/en/stable/#), fixture replacement tool that aims to easy-to-use factories for complex objects
+
+**Development**
+- [Docker](https://www.docker.com/), build and run the entire application in docker containers
+- [Watchdog](https://pypi.org/project/watchdog/), python file change monitor to reload django fast when you modify a python file
+- [Isort](https://github.com/PyCQA/isort), sort and organize your imports automatically
+- [Black](https://github.com/psf/black), code-formatter that automatically restructure your code
+- [Flak8](https://flake8.pycqa.org/en/latest/), tool for styled guide enforcement
+- [Pre-commit](https://pre-commit.com/), framework for managing and maintaining pre-commit hooks
+
+
+## Patterns
 
 - Repository Pattern
-  - Every query should be written in the module `core/db/repository`
+  - Almost every query should live in `core/db/repository/`
   - Avoid writing queries on Django's Manager/QuerySet.
   - The repository functions should return a list of instances, instead of a QuerySet. This makes easy caching data. 
 - Single Django app layer
@@ -34,8 +45,7 @@ This is a compilation of patterns and libraries that I learned over the years to
 - One model per file
   - Each model should have its own file in `core/db/models/`
 - Service layer
-  - Add all business logic in `core/services/`
-
+  - All business logic should be added in `core/services/`
 
 
 ## Setup
@@ -51,7 +61,6 @@ Install pre-commit
 $ pip install pre-commit
 $ pre-commit install
 ```
-
 
 ### Docker
 

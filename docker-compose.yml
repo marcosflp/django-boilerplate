@@ -4,7 +4,7 @@ services:
   web:
     container_name: django
     build: .
-    command: gunicorn wsgi -b 0.0.0.0:8000
+    command: /app/entrypoint/dev-run-web.sh
     volumes:
       - .:/app
     ports:
@@ -33,7 +33,7 @@ services:
     restart: always
     build:
       context: .
-    command: celery -A core.celery_worker worker -B -l info
+    command: watchmedo auto-restart -d . -p '*.py' --recursive -- celery -A core.celery_worker worker -B -l info
     volumes:
       - .:/app
     depends_on:

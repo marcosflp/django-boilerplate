@@ -29,11 +29,11 @@ Faker==11.3.0
 fakeredis==1.7.0
 filelock==3.4.2
 flake8==4.0.1
+freezegun==1.1.0
 graphene==2.1.9
 graphene-django==2.15.0
 graphql-core==2.3.2
 graphql-relay==2.0.1
-gunicorn==20.1.0
 identify==2.4.4
 idna==3.3
 iniconfig==1.1.1
@@ -90,6 +90,7 @@ tzlocal==4.1
 urllib3==1.26.8
 vine==5.0.0
 virtualenv==20.13.0
+watchdog==2.1.6
 wcwidth==0.2.5
 whitenoise==5.3.0
 wrapt==1.13.3

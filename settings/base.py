@@ -70,7 +70,7 @@ WSGI_APPLICATION = "wsgi.application"
 DATABASES = {
     "default": config(
         "DATABASE_URL",
-        default="postgres://root:password@postgres:5432/postgres",
+        default="postgres://root:password@postgres:5432/django_boilerplate",
         cast=db_url,
     ),
 }
