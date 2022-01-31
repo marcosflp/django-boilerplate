@@ -23,6 +23,7 @@ This is a compilation of patterns and libraries that I learned over the years to
 - [Faker](https://faker.readthedocs.io/en/master/), generates fake data for you
 - [Freezegun](https://github.com/spulec/freezegun), allows your tests to freeze or travel through time
 - [Factory Boy](https://factoryboy.readthedocs.io/en/stable/#), fixture replacement tool that aims to easy-to-use factories for complex objects
+- [Pytest-Mock](https://pypi.org/project/pytest-mock/), plugin that provides a `mocker` fixture that is a wrapper around the mock package
 
 **Development**
 - [Docker](https://www.docker.com/), build and run the entire application in docker containers
