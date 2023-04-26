@@ -80,36 +80,67 @@ $ pre-commit install
 
 ## Deployment
 
-Automatically deploy this project to Heroku!
+Automatically deploy this project to AWS with Terraform and Ansible!
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+### Set environment variables
 
-### How it works
+AWS - With admin access to create EC2, RDS instances and network resources
+```shell
+$ export AWS_ACCESS_KEY_ID=
+$ export AWS_SECRET_ACCESS_KEY=
+```
 
-The "Deploy to Heroku" button enables users to deploy apps to Heroku without leaving the web browser, and with little or no configuration. There are four conf files required to deploy this project: 
+Terraform
+```shell
+$ export TF_VAR_AWS_DB_PASSWORD_DJANGO_BOILERPLATE=
+```
 
-#### `app.json`
+Godaddy - To automatically manage your domain
+```shell
+$ export GODADDY_API_KEY=
+$ export GODADDY_API_SECRET=
+```
 
-This file describes the settings to automatically deploy the project to Heroku.
+### Terraform
 
-- **env**: environment variables. Most of the settings is already configured. You just need to make sure to set the `ALLOWED_HOSTS` and `FRONTEND_APP_URL` correctly to avoid CORS problems 
-- **addons**: specify the services used by the application (e.g.: postgres)
-- **formation**: define the dyno instances. You can set the size and the amount of instances
-- **buildpacks**: specify how to build the application. By adding `"heroku/python"` heroku will automatically:
-  - Build a python instance to run the project
-  - Install the project's dependencies from the `requirements.txt` file
-  - Run `python manage.py collectstatic`
 
-#### `Procfile`
+Setup
+```shell
+$ cd deployment/terraform
+$ terraform init
+$ terraform apply
+```
 
-This file specifies the commands that are executed by the app on startup. We are using it to run the django and celery after Heroku finishes the deployment.
+### Ansible
 
-#### `bin/post_compile`
+Create and set all Django production's settings env variables 
+```shell
+$ cp deployment/config_files/.env.production.example deployment/config_files/.env.production
+```
 
-This is a bash script file that is used by `"heroku/python"` build-pack to run commands at the end of the deployment cycle.
+Update Nginx domain name at
+```shell
+$ deployment/config_files/nginx/sites-enabled/django_boilerplate.org.conf
+```
 
-We are using this file to automatically run the migrations.
+Update gunicorn path at
+```shell
+$ deployment/config_files/gunicorn.service
+```
 
-#### `runtime.txt`
+Set the hosts at
+```shell
+$ deployment/config_files/inventory
+```
 
-Specify the python version to be used by `"heroku/python"` build-pack
+Setup the entire Django app and Webservers
+```shell
+$ cd deployment/ansible
+$ ansible-playbook -i inventory playbook_setup_ubuntu.yml playbook_setup_django.yml playbook_setup_webservers.yml --tags="setup"
+```
+
+Deploy updates
+```shell
+$ cd deployment/ansible
+$ ansible-playbook -i inventory playbook_setup_ubuntu.yml playbook_setup_django.yml playbook_setup_webservers.yml --tags="deploy"
+```

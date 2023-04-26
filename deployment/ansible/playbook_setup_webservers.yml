@@ -1,0 +1,127 @@
+---
+- name: Setup Webservers
+  hosts: [general_purposes_webserver]
+  become: true
+
+  vars:
+    project_name: cloudatlas_blog
+    local_project_path: "{{ playbook_dir }}/../../../{{ project_name }}"
+
+  tasks:
+    # Configure Nginx
+
+    - name: Update and upgrade Apt
+      apt:
+        update_cache: yes
+        upgrade: yes
+      tags: ['setup', 'update_packages']
+
+    - name: Install APT Packages
+      apt: name={{ item }} update_cache=yes state=latest
+      loop: [
+        'nginx',
+        'supervisor',
+        'certbot',
+      ]
+      tags: ['setup', 'update_packages']
+
+    - name: Delete default nginx site
+      file:
+        path: /etc/nginx/sites-available/default
+        state: absent
+      tags: ['setup']
+
+    - name: Delete default nginx site
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      tags: ['setup']
+
+    - name: Copy default Nginx files config
+      synchronize:
+        src: ../config_files/nginx
+        dest: /etc/
+        recursive: true
+        perms: true
+      tags: ['setup', 'update']
+
+    - name: Check SSL Certificate file status
+      become: true
+      stat:
+        path: "/etc/letsencrypt/live/cloudatlas.org/fullchain.pem"
+      register: ssl_certificate_file_status
+      tags: [ 'setup' ]
+
+    - name: Comment directives related to SSL
+      command: 'sed -i -r "s/(listen .*443)/\1; #/g; s/(ssl_(certificate|certificate_key|trusted_certificate) )/#;#\1/g; s/(server \{)/\1\n    ssl off;/g" /etc/nginx/sites-available/cloudatlas.org.conf'
+      when: not ssl_certificate_file_status.stat.exists
+      tags: ['setup']
+
+    - name: Restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+      when: not ssl_certificate_file_status.stat.exists
+      tags: ['setup']
+
+    - name: Create letsencrypt directory
+      file:
+        path: /var/www/_letsencrypt
+        state: directory
+      when: not ssl_certificate_file_status.stat.exists
+      tags: ['setup']
+
+    - name: Run certbot to obtain certificates
+      command: certbot certonly --webroot -d cloudatlas.org --email info@cloudatlas.org -w /var/www/_letsencrypt -n --agree-tos --force-renewal
+      when: not ssl_certificate_file_status.stat.exists
+      tags: [ 'setup' ]
+
+    - name: Uncomment directives related to SSL
+      command: 'sed -i -r -z "s/#?; ?#//g; s/(server \{)\n    ssl off;/\1/g" /etc/nginx/sites-available/cloudatlas.org.conf'
+      when: not ssl_certificate_file_status.stat.exists
+      tags: ['setup']
+
+    - name: Check Nginx dhparam.pem file status
+      become: true
+      stat:
+        path: "/etc/nginx/dhparam.pem"
+      register: nginx_dhparam_file_status
+      tags: ['setup']
+
+    - name: Generate openssl dhparam for Nginx
+      command: 'openssl dhparam -out /etc/nginx/dhparam.pem 2048'
+      when: not nginx_dhparam_file_status.stat.exists
+      tags: ['setup']
+
+    # Configure Gunicorn
+
+    - name: Copy gunicorn socket
+      copy:
+        src: "{{ local_project_path }}/deployment/config_files/gunicorn.socket"
+        dest: "/etc/systemd/system/gunicorn.socket"
+      tags: ['setup', 'update']
+
+    - name: Copy gunicorn service
+      copy:
+        src: "{{ local_project_path }}/deployment/config_files/gunicorn.service"
+        dest: "/etc/systemd/system/gunicorn.service"
+      tags: ['setup', 'update']
+
+    # Restart Services
+
+    - name: Reload systemd configuration
+      systemd:
+        daemon-reload: yes
+      tags: ['setup', 'update']
+
+    - name: Restart nginx
+      systemd:
+        name: nginx
+        state: restarted
+      tags: ['setup', 'update']
+
+    - name: Restart Gunicorn
+      systemd:
+        name: gunicorn
+        state: restarted
+      tags: ['setup', 'update']
