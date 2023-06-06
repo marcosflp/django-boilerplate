@@ -95,11 +95,6 @@ Terraform
 $ export TF_VAR_AWS_DB_PASSWORD_DJANGO_BOILERPLATE=
 ```
 
-Godaddy - To automatically manage your domain
-```shell
-$ export GODADDY_API_KEY=
-$ export GODADDY_API_SECRET=
-```
 
 ### Terraform
 
