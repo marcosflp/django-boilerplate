@@ -35,7 +35,6 @@
         'python3-testresources',
         'python-is-python3',
         'python-dev-is-python3',
-        'libpython3.9',
       ]
       tags: ['setup', 'update_packages', 'deploy']
 

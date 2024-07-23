@@ -12,7 +12,7 @@ RUN \
   # Install default packages \
   && apt-get update \
   && apt-get install -y --no-install-recommends $BUILD_DEPS \
-  && apt-get install -y wget less git libpq-dev vim-tiny python3 python3-pip python-is-python3 libpython3.9 \
+  && apt-get install -y wget less git libpq-dev vim-tiny python3 python3-pip python-is-python3 \
   # Install postgres-client \
   && apt-get -y install postgresql-client \
   # Install project requirements
