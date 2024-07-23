@@ -108,6 +108,11 @@ $ terraform apply
 
 ### Ansible
 
+Configure ansible settings
+```shell
+$ cp deployment/application/ansible/vars.yml.example deployment/application/ansible/vars.yml
+```
+
 Create and set all Django production's settings env variables 
 ```shell
 $ cp deployment/config_files/.env.production.example deployment/config_files/.env.production
