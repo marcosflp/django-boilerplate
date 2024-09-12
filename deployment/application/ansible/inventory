@@ -1,0 +1,31 @@
+[webservers_as_root]
+django_boilerplate_backend_webserver_as_root ansible_host=167.172.240.32
+
+[webservers]
+django_boilerplate_backend_webserver ansible_host=167.172.240.32
+
+[redis]
+django_boilerplate_redis ansible_host=167.172.240.32
+
+[celery]
+django_boilerplate_celery ansible_host=167.172.240.32
+
+
+[webservers_as_root:vars]
+ansible_user=root
+ansible_ssh_private_key_file=~/.ssh/marcosflp
+
+[webservers:vars]
+ansible_user=django_boilerplate
+ansible_ssh_private_key_file=~/.ssh/marcosflp
+
+[redis:vars]
+ansible_user=django_boilerplate
+ansible_ssh_private_key_file=~/.ssh/marcosflp
+
+[celery:vars]
+ansible_user=django_boilerplate
+ansible_ssh_private_key_file=~/.ssh/marcosflp
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3.8

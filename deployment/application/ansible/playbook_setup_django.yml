@@ -1,12 +1,14 @@
 ---
 - name: Deploy Django Application
-  hosts: [general_purposes_webserver]
+  hosts: [django_boilerplate_backend_webserver]
+
+  vars_files:
+    - vars.yml
 
   vars:
-    database_name: "cloudatlas_blog"
-    project_path_local: "{{ playbook_dir }}/../../../cloudatlas_blog"
-    project_path: "/home/ubuntu/cloudatlas_blog"
-    virtualenv_path: "{{ project_path }}/venv"
+    virtualenv_path: "{{ remote_project_path }}/venv"
+    python: "{{ virtualenv_path }}/bin/python"
+    pip: "{{ virtualenv_path }}/bin/pip"
 
   tasks:
     - name: Update and upgrade Apt
@@ -35,19 +37,29 @@
         'python3-testresources',
         'python-is-python3',
         'python-dev-is-python3',
+        'libpython3.9',
       ]
       tags: ['setup', 'update_packages', 'deploy']
 
     - name: Create project directory
       file:
-        path: "{{ project_path }}"
+        path: "{{ remote_project_path }}"
         state: directory
+      tags: ['setup']
+
+    - name: Create project's log directory
+      become: true
+      file:
+        path: "/var/log/django"
+        state: directory
+        owner: "{{ ubuntu_user }}"
+        group: www-data
       tags: ['setup']
 
     - name: Copy project files
       synchronize:
-        src: "{{ project_path_local }}"
-        dest: "{{ project_path }}/.."
+        src: "{{ local_project_path }}"
+        dest: "{{ remote_project_path }}/.."
       vars:
         rsync_opts: [--exclude=.git*]
       tags: ['setup', 'deploy', 'quick_deploy']
@@ -55,8 +67,8 @@
     - name: Configure Django environment settings
       copy:
         remote_src: True
-        src: "{{ project_path }}/deployment/config_files/.env.production"
-        dest: "{{ project_path }}/.env"
+        src: "{{ remote_project_path }}/deployment/application/config_files/.env.production"
+        dest: "{{ remote_project_path }}/.env"
       tags: ['setup', 'deploy', 'quick_deploy']
 
     - name: Create virtual environment
@@ -68,24 +80,31 @@
       tags: ['setup', 'deploy', 'quick_deploy']
 
     - name: Upgrade pip
-      shell: "{{ virtualenv_path }}/bin/pip install --upgrade pip"
+      shell: "{{ pip }} install --upgrade pip"
       tags: ['setup']
 
     - name: Install pip requirements
-      shell: "{{ virtualenv_path }}/bin/pip install -r {{ project_path }}/requirements.txt"
+      shell: "{{ pip }} install -r {{ remote_project_path }}/requirements.txt"
       tags: ['setup', 'deploy', 'quick_deploy']
 
     - name: Collect static files
-      shell: "{{ virtualenv_path }}/bin/python {{ project_path }}/manage.py collectstatic --noinput"
+      shell: "{{ python }} {{ remote_project_path }}/manage.py collectstatic --noinput"
       tags: ['setup', 'deploy', 'quick_deploy']
 
     - name: Run Migrations
-      shell: "{{ virtualenv_path }}/bin/python {{ project_path }}/manage.py migrate"
+      shell: "{{ python }} {{ remote_project_path }}/manage.py migrate"
       tags: ['setup', 'deploy', 'quick_deploy']
 
     - name: Restart Gunicorn
       become: true
       systemd:
         name: gunicorn
+        state: restarted
+      tags: ['deploy', 'quick_deploy']
+
+    - name: Restart Celery
+      become: true
+      systemd:
+        name: celery
         state: restarted
       tags: ['deploy', 'quick_deploy']

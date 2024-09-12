@@ -1,0 +1,73 @@
+---
+- name: Setup Ubuntu initial configuration
+  hosts: [django_boilerplate_backend_webserver]
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Update and upgrade Apt
+      become: true
+      apt:
+        update_cache: yes
+        upgrade: yes
+      tags: ['setup', 'update_packages']
+
+    - name: Install APT Packages
+      become: true
+      apt: name={{ item }} update_cache=yes state=latest
+      loop: [
+        # Tools
+        'git',
+        'vim',
+        'wget',
+        'curl',
+        'less',
+        'fish',
+        'tmux',
+        'ufw',
+      ]
+      tags: ['setup', 'update_packages']
+
+    - name: Set tmux config file
+      copy:
+        src: "{{ local_project_path }}/deployment/application/config_files/tmux.conf"
+        dest: "~/.tmux.conf"
+      tags: ['setup', 'update']
+
+    - name: Change default shell to fish
+      become: true
+      shell: "chsh -s /usr/bin/fish {{ ubuntu_user }}"
+      tags: ['setup']
+
+    # Setup UFW
+
+    - name: Allow SSH connections
+      become: true
+      community.general.ufw:
+        rule: allow
+        name: OpenSSH
+      tags: ['setup']
+
+    - name: Enable and deny by default
+      become: true
+      community.general.ufw:
+        state: enabled
+        default: deny
+      tags: ['setup']
+
+    - name: Allow all access to tcp port 80
+      become: true
+      community.general.ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+      tags: ['setup']
+
+    - name: Allow all access to tcp port 443
+      become: true
+      community.general.ufw:
+        rule: allow
+        port: '443'
+        proto: tcp
+      tags: ['setup']

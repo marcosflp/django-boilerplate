@@ -1,0 +1,38 @@
+- name: Setup Celery
+  hosts: [django_boilerplate_celery]
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Copy celery service
+      copy:
+        src: "{{ local_project_path }}/deployment/application/config_files/celery.service"
+        dest: "/etc/systemd/system/celery.service"
+      become: true
+      tags: ['setup', 'update']
+
+    - name: Create celery directory
+      become: true
+      file:
+        state: directory
+        path: "/var/run/celery"
+        owner: "{{ ubuntu_user }}"
+        group: www-data
+      tags: ['setup']
+
+    - name: Create celery's log directory
+      become: true
+      file:
+        path: "/var/log/celery"
+        state: directory
+        owner: "{{ ubuntu_user }}"
+        group: www-data
+      tags: ['setup']
+
+    - name: Enable Celery to start at boot
+      systemd:
+        name: celery.service
+        enabled: true
+      become: true
+      tags: ['setup']

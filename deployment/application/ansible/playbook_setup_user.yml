@@ -1,0 +1,40 @@
+---
+- name: Setup Ubuntu user
+  hosts: [django_boilerplate_backend_webserver_as_root]
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Setup passwordless sudo
+      lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: '^%sudo'
+        line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+        validate: '/usr/sbin/visudo -cf %s'
+      tags: ['setup']
+
+    - name: Create user with sudo privileges
+      user:
+        name: "{{ ubuntu_user }}"
+        state: present
+        groups: sudo
+        append: true
+        create_home: true
+      tags: ['setup']
+
+    - name: Set authorized key for remote user
+      ansible.posix.authorized_key:
+        user: "{{ ubuntu_user }}"
+        state: present
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/digitalocean_django_boilerplate_public_ssh_key.pem') }}"
+      tags: ['setup']
+
+    - name: Disable password authentication for root
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        state: present
+        regexp: '^#?PermitRootLogin'
+        line: 'PermitRootLogin prohibit-password'
+      tags: ['setup']

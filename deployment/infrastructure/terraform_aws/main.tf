@@ -14,7 +14,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-west-2"
+  region = var.AWS_DEFAULT_ZONE
 }
 
 provider "godaddy" {}
@@ -23,16 +23,16 @@ provider "godaddy" {}
 # EC2 INSTANCES
 
 resource "aws_instance" "django_boilerplate_webserver" {
-  ami                         = "ami-0db245b76e5c21ca1"
+  ami                         = "ami-002a875adefcee7fc"
   instance_type               = "t2.micro"
   associate_public_ip_address = true
   key_name                    = aws_key_pair.django_boilerplate_private_ssh_key_pair.key_name
   subnet_id                   = aws_subnet.public_subnet_1.id
   tags = {
-    Name = "Django Boilerplate"
+    Name = "django_boilerplate backend"
   }
 
-  availability_zone = var.AWS_AVAILABILITY_ZONES[0]
+  availability_zone = var.AWS_DEFAULT_AVAILABILITY_ZONES[0]
   security_groups = [
     aws_security_group.allow_ssh.id,
     aws_security_group.allow_https.id,
@@ -44,16 +44,16 @@ resource "aws_instance" "django_boilerplate_webserver" {
 # RDS INSTANCES
 
 resource "aws_db_instance" "django_boilerplate" {
-  identifier = "django-boilerplate"
+  identifier = "django_boilerplate"
   db_name    = "django_boilerplate"
   username   = "root"
   password   = var.AWS_DB_PASSWORD_DJANGO_BOILERPLATE
   tags = {
-    Name = "Django Boilerplate"
+    Name = "django_boilerplate backend"
   }
 
-  availability_zone    = var.AWS_AVAILABILITY_ZONES[0]
-  db_subnet_group_name = aws_db_subnet_group.main_private_db_subnet_group.name
+  availability_zone    = var.AWS_DEFAULT_AVAILABILITY_ZONES[0]
+  db_subnet_group_name = aws_db_subnet_group.django_boilerplate_private_db_subnet_group.name
   vpc_security_group_ids = [
     aws_security_group.allow_rds_postgres_connection.id,
     aws_security_group.allow_all_outbound_connections.id

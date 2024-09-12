@@ -1,9 +1,0 @@
-[webservers]
-django_boilerplate ansible_host=44.235.42.69
-
-[webservers:vars]
-ansible_user=ubuntu
-ansible_ssh_private_key_file=~/.ssh/django_boilerplate_private_ssh_key.pem
-
-[all:vars]
-ansible_python_interpreter=/usr/bin/python3.8

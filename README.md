@@ -1,11 +1,144 @@
-## About
+# About
 
-After years of working with different Django projects, I noticed some excellent design patterns and packages that helps maintain the project's code quality, simplicity, readability, maintainability, reliability, and testing.
+A Django boilerplate project that uses great patterns and libraries to help you build a robust Django application fast. 
+You can quickly start writing up your applications features.
 
-This is a compilation of patterns and libraries that I learned over the years to help build a robust Django application fast.
+
+# Setup
+
+```shell
+# Clone the project
+git clone git@github.com:marcosflp/django-boilerplate.git project_name
+cd project_name
+
+# Install pre-commit
+pip install pre-commit
+pre-commit install
+```
+
+### Docker
+
+```shell
+# Running the app
+docker compose up
+
+# Running tests
+docker compose exec web pytest
+```
+
+### Locally
+
+```shell
+# Before starting, remember to create a new virtual env.
+# Also, you need to have a running postgres server with the right credentials configured on the settings
+
+# Install the dependencies 
+pip install -r requirements.txt
+ 
+# Run migrations:
+python manage.py migrate
+
+# Running the server
+python manage.py runserver
+
+# Running tests
+pytest
+
+```
 
 
-## Stack included
+# Deployment
+
+Automatically deploy the project to AWS with Terraform and Ansible.
+
+### Configure
+
+> You need an AWS credential with admin access to create: 
+(1) EC2, (2) RDS instances, (3) network resources
+
+Add to your ~/.bash_rc fish or zsh file the following environment variables
+```bash
+# AWS (Required by Terraform and Ansible)
+export AWS_ACCESS_KEY_ID=
+export AWS_SECRET_ACCESS_KEY=
+
+# Godaddy (Required by Terraform)
+export GODADDY_API_KEY=
+export GODADDY_API_SECRET=
+
+# Terraform variables used by Django 
+export TF_VAR_AWS_DB_PASSWORD_DJANGO_BOILERPLATE=
+```
+
+Using Search Everywhere and Match case on your IDE or Text Editor, rename all in the following order: 
+  - `django-boilerplate.org` to `your-domain.com`
+  - `django_boilerplate` to `your_project_name`  
+  - `Django Boilerplate ` to `Your Project Name` 
+  - `DJANGO_BOILERPLATE` to `YOUR_PROJECT_NAME` 
+
+## Terraform
+
+Create and manage your infrastructure with Terraform.
+
+### Configure
+```shell
+# Initial Setup
+cd deployment/terraform
+terraform init
+```
+
+### Deploy
+
+```shell
+# Create or Update resources on AWS using Terraform apply
+terraform apply
+```
+
+## Ansible
+
+Automate the setup and deployment process of your application with Ansible. 
+
+### Configure
+
+```shell
+# Set the hosts at
+deployment/config_files/inventory
+
+# Create and set your ansible vars
+cp deployment/application/ansible/vars.yml.example deployment/application/ansible/vars.yml
+
+# Create and set all Django production env variables
+cp deployment/config_files/.env.production.example deployment/config_files/.env.production
+
+# Rename the Nginx site-available
+mv deployment/config_files/nginx/sites-enabled/django_boilerplate.org.conf deployment/config_files/nginx/sites-enabled/yourdomain.com.conf
+
+# Rename the Nginx site-enabled
+mv deployment/config_files/nginx/sites-enabled/django_boilerplate.org.conf deployment/config_files/nginx/sites-enabled/yourdomain.com.conf
+
+# Make sure Nginx is properly configured (server_name, location, etc) at
+deployment/config_files/nginx/sites-enabled/yourdomain.com.conf
+
+# Make sure Gunicorn is properly configured (WorkingDirectory, ExecStart) at
+deployment/config_files/gunicorn.service
+```
+
+Set up and run the initial Django app
+```shell
+cd deployment/ansible
+ansible-playbook -i inventory playbook_setup_ubuntu.yml playbook_setup_django.yml playbook_setup_webservers.yml --tags="setup"
+```
+
+
+### Deploy
+
+```shell
+cd deployment/ansible
+ansible-playbook -i inventory playbook_setup_ubuntu.yml playbook_setup_django.yml playbook_setup_webservers.yml --tags="deploy"
+```
+
+
+## Included
 
 **App**
 - [Django3](https://www.djangoproject.com/), framework for building fast and clean web applications
@@ -47,100 +180,3 @@ This is a compilation of patterns and libraries that I learned over the years to
   - Each model should have its own file in `core/db/models/`
 - Service layer
   - All business logic should be added in `core/services/`
-
-
-## Setup
-
-Clone the project
-```shell
-$ git clone git@github.com:marcosflp/django-boilerplate.git project_name
-$ cd project_name
-```
-
-Install pre-commit
-```shell
-$ pip install pre-commit
-$ pre-commit install
-```
-
-### Docker
-
-- Running the app: `$ docker compose up`
-- Running tests: `docker compose exec web pytest`
-
-### Locally
-
-- Create a new virtual env
-- Install the dependencies: `$ pip install -r requirements.txt`
-- You have to install and run the postgres server. Also, configure the database settings 
-- Run migrations: `$ python manage.py migrate`
-- Running the server: `$ python manage.py runserver`
-- Running tests: `$ pytest`
-
-
-## Deployment
-
-Automatically deploy this project to AWS with Terraform and Ansible!
-
-### Set environment variables
-
-AWS - With admin access to create EC2, RDS instances and network resources
-```shell
-$ export AWS_ACCESS_KEY_ID=
-$ export AWS_SECRET_ACCESS_KEY=
-```
-
-Terraform
-```shell
-$ export TF_VAR_AWS_DB_PASSWORD_DJANGO_BOILERPLATE=
-```
-
-
-### Terraform
-
-
-Setup
-```shell
-$ cd deployment/terraform
-$ terraform init
-$ terraform apply
-```
-
-### Ansible
-
-Configure ansible settings
-```shell
-$ cp deployment/application/ansible/vars.yml.example deployment/application/ansible/vars.yml
-```
-
-Create and set all Django production's settings env variables 
-```shell
-$ cp deployment/config_files/.env.production.example deployment/config_files/.env.production
-```
-
-Update Nginx domain name at
-```shell
-$ deployment/config_files/nginx/sites-enabled/django_boilerplate.org.conf
-```
-
-Update gunicorn path at
-```shell
-$ deployment/config_files/gunicorn.service
-```
-
-Set the hosts at
-```shell
-$ deployment/config_files/inventory
-```
-
-Setup the entire Django app and Webservers
-```shell
-$ cd deployment/ansible
-$ ansible-playbook -i inventory playbook_setup_ubuntu.yml playbook_setup_django.yml playbook_setup_webservers.yml --tags="setup"
-```
-
-Deploy updates
-```shell
-$ cd deployment/ansible
-$ ansible-playbook -i inventory playbook_setup_ubuntu.yml playbook_setup_django.yml playbook_setup_webservers.yml --tags="deploy"
-```

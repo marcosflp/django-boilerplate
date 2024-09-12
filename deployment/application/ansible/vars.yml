@@ -1,0 +1,7 @@
+---
+ubuntu_user: django_boilerplate
+local_project_path: "{{ playbook_dir }}/../../../../django_boilerplate_backend"
+remote_project_path: "/home/{{ ubuntu_user }}/django_boilerplate_backend"
+db_name: django_boilerplate_backend_db
+db_user: django_boilerplate_backend_user
+db_password: L9BwVupDswjmV8*kdsMTzzC-Pe

@@ -1,0 +1,19 @@
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+User=django_boilerplate
+Group=www-data
+WorkingDirectory=/home/django_boilerplate/django_boilerplate_backend
+ExecStart=/home/django_boilerplate/django_boilerplate_backend/venv/bin/gunicorn \
+          --log-level info \
+          --access-logfile /var/log/gunicorn/django_boilerplate_access.log \
+          --error-logfile /var/log/gunicorn/django_boilerplate_error.log \
+          --workers 2 \
+          --bind unix:/run/gunicorn.sock \
+          wsgi:application
+
+[Install]
+WantedBy=multi-user.target

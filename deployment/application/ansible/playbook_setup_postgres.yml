@@ -1,0 +1,83 @@
+---
+- name: Setup Postgres
+  hosts: [django_boilerplate_backend_webserver_as_root]
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Install APT Packages
+      become: true
+      apt: name={{ item }} update_cache=yes state=latest
+      loop: [
+        'g++',
+        'libpq-dev',
+        'python3-pip',
+        'python3.9-dev',
+      ]
+      tags: ['setup']
+
+    - name: Install psycopg2
+      pip:
+        name: psycopg2
+      tags: ['setup']
+
+    - name: Add repository for postgres-14
+      shell: sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+      become: true
+      tags: ['setup']
+
+    - name: Download GPG key for postgres-14
+      shell: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+      become: true
+      tags: ['setup']
+
+    - name: Update and upgrade Apt
+      become: true
+      apt:
+        update_cache: yes
+        upgrade: yes
+      tags: ['setup']
+
+    - name: Install Postgres 14
+      become: true
+      apt:
+        name: postgresql-14
+        state: present
+      tags: ['setup']
+
+    - name: Start Postgres service
+      become: true
+      systemd:
+        name: postgresql@14-main
+        state: started
+        enabled: true
+      tags: ['setup']
+
+    - name: Create db user
+      postgresql_user:
+        state: present
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+      become: true
+      become_user: postgres
+      tags: ['setup']
+
+    - name: Create django database
+      postgresql_db:
+        state: present
+        name: "{{ db_name }}"
+      become: true
+      become_user: postgres
+      tags: ['setup']
+
+    - name: Grant user access to db
+      postgresql_privs:
+        type: database
+        database: "{{ db_name }}"
+        roles: "{{ db_user }}"
+        grant_option: no
+        privs: all
+      become: true
+      become_user: postgres
+      tags: ['setup']

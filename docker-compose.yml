@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   web:
-    container_name: django
+    container_name: boilerplate_django
     build: .
     command: /app/entrypoint/dev-run-web.sh
     volumes:
@@ -14,7 +14,7 @@ services:
       - redis
 
   postgres:
-    container_name: postgres
+    container_name: boilerplate_postgres
     image: postgres:14.1-alpine
     ports:
       - "6432:5432"
@@ -25,11 +25,11 @@ services:
       - ./.postgres-data/db:/var/lib/postgresql/data
 
   redis:
-    container_name: redis
+    container_name: boilerplate_redis
     image: redis:6.2.6-alpine
 
   celery:
-    container_name: worker
+    container_name: boilerplate_worker
     restart: always
     build:
       context: .
